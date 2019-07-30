@@ -1,5 +1,5 @@
 ---
-title: react-native安卓使用fetch发送https和ios发送http相关问题总结
+title: react-native中使用fetch发送https或http相关问题总结
 date: 2019-07-30 16:37:19
 tags: ReactNative
 categories: 前端
