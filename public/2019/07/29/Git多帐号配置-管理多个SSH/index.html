@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Git多帐号配置,管理多个SSH - 漫步者</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="漫步者博客,"> 
+    <meta name="description" content="
+当我们存在多个git账号的时候,比如公司用Gitlib或者Gerrit等等,而日常自己做的一些东西则会托管到Github上面。这些git账号的邮箱如果使用的是不同的话，就会存在生成一个git的ke,"> 
+    <meta name="author" content="Aaron"> 
+    <link rel="alternative" href="atom.xml" title="漫步者" type="application/atom+xml"> 
+    <link rel="icon" href="/img/logo.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">漫步者</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://windteam.cn"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">Git多帐号配置,管理多个SSH</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Git多帐号配置,管理多个SSH</h1>
+        <div class="stuff">
+            <span>七月 29, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Git/">Git</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/070816.jpg" alt></p>
+<p>当我们存在多个<code>git</code>账号的时候,比如公司用<code>Gitlib</code>或者<code>Gerrit</code>等等,而日常自己做的一些东西则会托管到<code>Github</code>上面。这些<code>git</code>账号的邮箱如果使用的是不同的话，就会存在生成一个<code>git</code>的<code>key</code>的时候会覆盖另外其他的的key 的问题，下面说一下怎么处理😸</p>
+<h3 id="查看自己现有的SSH-Key"><a href="#查看自己现有的SSH-Key" class="headerlink" title="查看自己现有的SSH-Key"></a>查看自己现有的SSH-Key</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">ls</span><br><span class="line"></span><br><span class="line">id_rsa</span><br><span class="line">id_rsa.pub</span><br><span class="line">known_hosts</span><br></pre></td></tr></table></figure>
+
+<p>如果你已经创建过git账号那你可能和我一样会看到只有一个<code>SSH-Key</code>,</p>
+<p>这个<code>SSH-Key</code>是我在公司<code>Gerrit</code>(你也可以理解为<code>Gitlib</code>一样的东西)所使用的<code>SSH-Key</code>。</p>
+<p>由于公司所用邮箱于<code>Gitlib</code>上邮箱不一致,如果重复生成新的<code>SSH-Key</code>只会吧之前的公司的<code>SSH-Key</code>覆盖掉,这样并不是我们所想看到的结果。</p>
+<p>废话说完了，就开始说说怎么解决这个问题:</p>
+<h3 id="生成新的的SSH-Key"><a href="#生成新的的SSH-Key" class="headerlink" title="生成新的的SSH-Key"></a>生成新的的SSH-Key</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"你的邮箱"</span></span><br></pre></td></tr></table></figure>
+
+<p>第一个内容输入<code>ompany_id_rsa</code>(名字随便起，自己能区分的开就行)，余下的一路回车即可</p>
+<p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/101105.png" alt></p>
+<p>到这里,你公司的<code>SSH-Key</code>就完成了，查看一下<code>.ssh</code>文件夹会多出你新添加<code>SSH-Key</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">ls</span><br><span class="line"></span><br><span class="line">id_rsa</span><br><span class="line">id_rsa.pub</span><br><span class="line">ompany_id_rsa</span><br><span class="line">ompany_id_rsa.pub</span><br><span class="line">known_hosts</span><br></pre></td></tr></table></figure>
+
+<p>可以看到目前我们拥有两个不同的SSH-Key，到此为止已经完成一半了，现在还需要关键一步，接着往下看…</p>
+<h3 id="添加config配置文件"><a href="#添加config配置文件" class="headerlink" title="添加config配置文件"></a>添加config配置文件</h3><p><code>config</code>文件作用是给<code>HOST</code>单独配置各自的<code>SSH-Key</code>，看下具体配置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置GitHub的SSH-Key</span></span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 配置公司的SSH-Key</span></span><br><span class="line">Host gerrit.com</span><br><span class="line">    HostName gerrit.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/ompany_id_rsa</span><br></pre></td></tr></table></figure>
+
+<p>保存后配置<code>**_id_rsa.pub</code>公钥,以<code>GitHub</code>为例：</p>
+<ol>
+<li>打开<code>GitHub</code>选择右上角头像下拉框选择<code>Settings</code></li>
+</ol>
+<p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/101107.png" alt></p>
+<ol start="2">
+<li>找到<code>SSH and GPG keys</code>选项，点击<code>New SSH key</code>按钮添加公钥。</li>
+</ol>
+<p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/101108.png" alt></p>
+<ol start="3">
+<li>公钥即为<code>～/.ssh/**_id_rsa.pub</code>文件中的内容，我这里使用的是<code>GitHub</code>的<code>id_rsa.pub</code></li>
+</ol>
+<p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/101109.png" alt><br>好了，没有之后了。祝你在技术的道路上越走越远🤣🤣🤣</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        <li title='0' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E6%8A%A5%E7%AD%94%E4%B8%80%E7%94%9F.mp3'></li>
+                    
+                        <li title='1' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E5%8F%AF%E5%90%A6%E5%86%B2%E7%A0%B4.mp3'></li>
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ee3640920c5ec2f34694'
+        data-cs='31ca17ca1df0813e0513ab2b0868b94cdeec4ced'
+        data-r='aaronbank.github.io'
+        data-o='aaronbank'
+        data-a='aaronbank'
+        data-d='true'
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class='side'>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看自己现有的SSH-Key"><span class="toc-number">1.</span> <span class="toc-text">查看自己现有的SSH-Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成新的的SSH-Key"><span class="toc-number">2.</span> <span class="toc-text">生成新的的SSH-Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加config配置文件"><span class="toc-number">3.</span> <span class="toc-text">添加config配置文件</span></a></li></ol>
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>
