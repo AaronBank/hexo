@@ -103,8 +103,8 @@ autoplay: false
 
 # 默认音乐（随机播放）
 mp3: 
-    - http://link.hhtjim.com/163/425570952.mp3
-    - http://link.hhtjim.com/163/425570952.mp3
+    - https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E5%8F%AF%E5%90%A6%E5%86%B2%E7%A0%B4.mp3
+    - https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E6%8A%A5%E7%AD%94%E4%B8%80%E7%94%9F.mp3
 
 # 首页封面图, 为空时取文章的cover作为封面
 welcome_cover: # /img/welcome-cover.jpg
