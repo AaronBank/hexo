@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Git 2.0 更改 push default - 漫步者</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="漫步者博客,"> 
+    <meta name="description" content="
+问题处理git更新后,项目push时如果提示这样的信息:
+warning: push.default尚未设置 ，是因为它的默认值在 Git 2.0 已从 ‘matching’变更为 ‘simple,"> 
+    <meta name="author" content="Aaron"> 
+    <link rel="alternative" href="atom.xml" title="漫步者" type="application/atom+xml"> 
+    <link rel="icon" href="/img/logo.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">漫步者</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://windteam.cn"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">Git 2.0 更改 push default</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">Git 2.0 更改 push default</h1>
+        <div class="stuff">
+            <span>七月 31, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Git/">Git</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/064701.jpg" alt></p>
+<h3 id="问题处理"><a href="#问题处理" class="headerlink" title="问题处理"></a>问题处理</h3><p><code>git</code>更新后,项目<code>push</code>时如果提示这样的信息:</p>
+<p><code>warning: push.default尚未设置</code> ，是因为它的默认值在 Git 2.0 已从 ‘matching’<br>变更为 ‘simple’。若要不再显示本信息并保持传统习惯，进行如下设置：</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global push.default matching</span><br></pre></td></tr></table></figure>
+
+<p>若要不再显示本信息并从现在开始采用新的使用习惯，设置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global push.default simple</span><br></pre></td></tr></table></figure>
+
+<p>当 <code>push.default</code> 设置为 <code>matching</code> 后，<code>git</code> 将推送和远程同名的所有本地分支。</p>
+<p>从 Git 2.0 开始，Git 默认采用更为保守的 <code>simple</code> 模式，只推送当前分支到远程关联的同名分支，即 <code>git push</code> 推送当前分支。</p>
+<p>参见 <code>git help config</code> 并查找 <code>push.default</code> 以获取更多信息。<br>（<code>simple</code> 模式由 Git 1.7.11 版本引入。如果您有时要使用老版本的 Git，为保持兼容，请用 <code>current</code> 代替 <code>simple</code>。</p>
+<h3 id="Matching"><a href="#Matching" class="headerlink" title="Matching"></a>Matching</h3><p><code>matching</code> 参数是 <code>Git 1.x</code> 的默认行为，其意是如果你执行 <code>git push</code> 但没有指定分支，它将 <code>push</code> 所有你本地的分支到远程仓库中对应匹配的分支。</p>
+<h3 id="Simple"><a href="#Simple" class="headerlink" title="Simple"></a>Simple</h3><p>而 <code>Git 2.x</code>默认的是 <code>simple</code>，意味着执行 <code>git push</code> 没有指定分支时，只有当前分支会被 <code>push</code> 到你使用 <code>git pull</code> 获取的代码。</p>
+<h3 id="修改默认设置"><a href="#修改默认设置" class="headerlink" title="修改默认设置"></a>修改默认设置</h3><p>从上述消息提示中的解释，我们可以修改全局配置，使之不会每次 push 的时候都进行提示。对于 <code>matching</code> 输入如下命令即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global push.default matching</span><br></pre></td></tr></table></figure>
+
+<p>而对于 <code>simple</code> ，请输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global push.default simple</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考地址：</strong><a href="https://www.oschina.net/news/45585/git-2-x-change-push-default-to-simple" target="_blank" rel="noopener">https://www.oschina.net/news/45585/git-2-x-change-push-default-to-simple</a></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        <li title='0' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E6%8A%A5%E7%AD%94%E4%B8%80%E7%94%9F.mp3'></li>
+                    
+                        <li title='1' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E5%8F%AF%E5%90%A6%E5%86%B2%E7%A0%B4.mp3'></li>
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ee3640920c5ec2f34694'
+        data-cs='31ca17ca1df0813e0513ab2b0868b94cdeec4ced'
+        data-r='aaronbank.github.io'
+        data-o='aaronbank'
+        data-a='aaronbank'
+        data-d='true'
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class='side'>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题处理"><span class="toc-number">1.</span> <span class="toc-text">问题处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Matching"><span class="toc-number">2.</span> <span class="toc-text">Matching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Simple"><span class="toc-number">3.</span> <span class="toc-text">Simple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改默认设置"><span class="toc-number">4.</span> <span class="toc-text">修改默认设置</span></a></li></ol>
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

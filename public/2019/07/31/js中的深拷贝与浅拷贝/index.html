@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>js中的深拷贝与浅拷贝 - 漫步者</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="漫步者博客,"> 
+    <meta name="description" content="
+js 数据类型可分为两大类基本数据类型和引用数据类型。我们都知道引用类型的值是存放在堆里面的。
+如果现在我们有一个对象A他的值想赋值给B，像这样：
+1234567891011121314let A,"> 
+    <meta name="author" content="Aaron"> 
+    <link rel="alternative" href="atom.xml" title="漫步者" type="application/atom+xml"> 
+    <link rel="icon" href="/img/logo.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">漫步者</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://windteam.cn"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">js中的深拷贝与浅拷贝</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">js中的深拷贝与浅拷贝</h1>
+        <div class="stuff">
+            <span>七月 31, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p><img src="http://hexo-shen.oss-cn-beijing.aliyuncs.com/hexo/032418.jpg" alt="未标题-1"></p>
+<p>js 数据类型可分为两大类<code>基本数据类型</code>和<code>引用数据类型</code>。我们都知道<code>引用类型</code>的值是存放在<code>堆</code>里面的。</p>
+<p>如果现在我们有一个对象A他的值想赋值给B，像这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> A = &#123;</span><br><span class="line">    age: <span class="number">24</span>,</span><br><span class="line">    name: <span class="string">'漫步者'</span>,</span><br><span class="line">    detailed: &#123;</span><br><span class="line">        introduce: <span class="string">'Do one thing at a time, and do well.  '</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> B = A</span><br><span class="line"></span><br><span class="line">B.name = <span class="string">'Aaron'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(B.name) <span class="comment">//=&gt; 'Aaron'</span></span><br><span class="line"><span class="built_in">console</span>.log(A.name) <span class="comment">//=&gt; 'Aaron'</span></span><br></pre></td></tr></table></figure>
+
+<p>分别打印<code>A</code>和<code>B</code>结果，由于<code>A</code>的类型是<code>引用数据类型</code>，所以导致<code>B</code>和<code>A</code>指向同一个内存地址，所以你操作了<code>B</code>那么<code>A</code>也会跟随着改变。</p>
+<p>但是问题来了我们并不想因为操作了<code>B</code>使得<code>A</code>也受到波及，怎么办。。。</p>
+<p>对于基本类型，拷贝过程就是对值的复制，这个过程会开辟出一个新的内存空间，将值复制到新的内存空间。而对于引用类型来书，浅拷贝过程就是对指针的复制，这个过程并没有开辟新的堆内存空间，只是将指向该内存的地址进行了复制。然而对引用类型的拷贝会出现一个问题，那就是修改其中一个对象的属性，则另一个对象的属性也会改变。产生了问题那必然有相对解决的方法， 就这样深拷贝就开始入场了，深拷贝会开辟新的栈，两个对象对应两个不同的地址，这样一来，改一个对象的属性，也不会改变另一个对象的属性。</p>
+<p>下面我们用代码看一下浅拷贝于深拷贝是如何实现的 :</p>
+<h3 id="浅拷贝实现方式"><a href="#浅拷贝实现方式" class="headerlink" title="浅拷贝实现方式"></a>浅拷贝实现方式</h3><h4 id="1-for-in"><a href="#1-for-in" class="headerlink" title="1. for in"></a>1. for in</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> A = &#123;</span><br><span class="line">    age: <span class="number">24</span>,</span><br><span class="line">    name: <span class="string">'漫步者'</span>,</span><br><span class="line">    detailed: &#123;</span><br><span class="line">        introduce: <span class="string">'Do one thing at a time, and do well.  '</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> extend = <span class="function">(<span class="params">initialObj</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> result = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> initialObj) result[key] = initialObj[key]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> B = extend(A)</span><br><span class="line"></span><br><span class="line">B.name = <span class="string">'Aaron'</span></span><br><span class="line"><span class="built_in">console</span>.log(B) <span class="comment">//=&gt; 'Aaron'</span></span><br><span class="line"><span class="built_in">console</span>.log(A) <span class="comment">//=&gt; '漫步者'</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-Object-assign"><a href="#2-Object-assign" class="headerlink" title="2. Object.assign()"></a>2. Object.assign()</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> B = <span class="built_in">Object</span>.assign(&#123;&#125;, A)</span><br><span class="line"></span><br><span class="line">B.name = <span class="string">'Aaron'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(B) <span class="comment">//=&gt; 'Aaron'</span></span><br><span class="line"><span class="built_in">console</span>.log(A) <span class="comment">//=&gt; '漫步者'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="对象的深拷贝"><a href="#对象的深拷贝" class="headerlink" title="对象的深拷贝"></a>对象的深拷贝</h3><p>如果我们把上面的<code>A</code>改成<code>obj</code>那浅拷贝就有心无力了 :</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    nNum : <span class="number">1</span>,</span><br><span class="line">    oAar : [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我们不妨可以再用上面的方法试一下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> newObj = extend(obj);</span><br><span class="line"></span><br><span class="line">newObj === obj   <span class="comment">//=&gt; false</span></span><br><span class="line">newObj.oAar === obj.oAar <span class="comment">//=&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的结果显示我们可以看出，<code>newObj.oAar</code>与<code>obj.oAar</code>指针所指的是同一个位置,那我们如何改正这个问题呢？</p>
+<p>其实也很容易,我们将<code>obj.oAar</code>再看待为一个新的对象,对其再进行一次浅拷贝不就可以了吗？？不说了,上代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span> (<span class="params">args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> result = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">in</span> args) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> args[item] === <span class="string">'object'</span> &amp;&amp; args[item] !== <span class="literal">null</span>) &#123;</span><br><span class="line">            result[item] = deepCopy(args[item]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            result[item] = args[item];</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">result(obj);</span><br></pre></td></tr></table></figure>
+
+<p>我们来验证一下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> newObj = deepCopy(obj);</span><br><span class="line"></span><br><span class="line">newObj === obj  <span class="comment">//=&gt; false</span></span><br><span class="line">newObj.oAar === obj.oAar  <span class="comment">//=&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>结果也显示我们实现了,ok</p>
+<p>但是有没有其他的方式呢,比如说更简洁一些的,也是有的:</p>
+<p>我们可以使用jQuery的<code>$.extend(true, {}, obj)</code>,同样也可以实现,是不是觉得眼熟。前面我们说浅拷贝的时候也说过这个方法,但是多了一个为true的参数,<code>$.extend()</code>方法,第一个参数默认为false,当设置它为true时则会开启深拷贝模式。</p>
+<p>想想还有没有什么其他的方式=￣ω￣=?</p>
+<p>其实还有一个捷径可走</p>
+<p>还是上面举的那个obj,我们对它再进行一次尝试</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    nNum: <span class="number">1</span>,</span><br><span class="line">    oAar: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span> (<span class="params">args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> result = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        result = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(args));</span><br><span class="line">    &#125; <span class="keyword">catch</span>(error)&#123;</span><br><span class="line">        <span class="keyword">return</span> args</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> newObj = deepCopy(obj);</span><br><span class="line"></span><br><span class="line">newObj === obj <span class="comment">//=&gt; false</span></span><br><span class="line">newObj.oAar === obj.oAar <span class="comment">//=&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>ヾ(｡｀Д´｡) 什么鬼,这样也行? 那还前面说那么多废话,直接上这个方法岂不是爽歪歪？</p>
+<p>但是这里不得不说明一点,投机取巧往往能达到看似相同的结果,但是还是存在一些隐性的问题的</p>
+<p>就如上面这种方式和递归的方法相比是有弊端的,比如它会抛弃对象的<code>constructor</code>。也就是深拷贝之后，不管这个对象原来的构造函数是什么，在深拷贝之后都会变成<code>Object</code>。</p>
+<p>这种方法能正确处理的对象只有 <code>Number、String、Boolean、Array</code> ，扁平对象，即那些能够被<code>json</code> 直接表示的数据结构。RegExp对象是无法通过这种方式深拷贝。</p>
+<p>最后再说一种方法,可以使用<code>Object.create()</code>方法达到深拷贝的效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepCopy</span> (<span class="params">args</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> result = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> item <span class="keyword">in</span> args) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> args[item] === <span class="string">'object'</span> &amp;&amp; args[item] !== <span class="literal">null</span>) &#123;</span><br><span class="line">            result[item] = args[item].constructor === <span class="built_in">Array</span> ? [] : <span class="built_in">Object</span>.create(prop);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            result[item] = args[item];</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> newObj = deepCopy(obj);</span><br><span class="line"></span><br><span class="line">newObj === obj <span class="comment">//=&gt; false</span></span><br><span class="line">newObj.oAar === obj.oAar <span class="comment">//=&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>好了，更多的第三方库的方法我们就不一一列举了，原理更重要嘛，对吧。</p>
+<p>最后我们来总结一下：</p>
+<p>浅拷贝我们说了3种方法 ：</p>
+<ul>
+<li><p>通过<code>for...in</code>循环来实现</p>
+</li>
+<li><p>通过<code>Object.assign()</code>方法来实现</p>
+</li>
+<li><p>通过<code>jQuery</code>中的<code>$.extend()</code>方法来实现</p>
+</li>
+</ul>
+<p>深拷贝我们同样说了四种方法 :</p>
+<ul>
+<li><p>通过递归的手法实现</p>
+</li>
+<li><p>通过<code>jQuery</code>中的<code>$.extend()</code>添加<code>true</code>参数方法来实现</p>
+</li>
+<li><p>通过<code>JSON</code>序列化反序列化来实现</p>
+</li>
+<li><p>用过<code>Object.create()</code>方法来实现</p>
+</li>
+</ul>
+<p><strong>除了这几种如果各位还想到了其他什么好的方法欢迎下方留言ヾ(￣▽￣)</strong></p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        <li title='0' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E6%8A%A5%E7%AD%94%E4%B8%80%E7%94%9F.mp3'></li>
+                    
+                        <li title='1' data-url='https://hexo-shen.oss-cn-beijing.aliyuncs.com/lip/BEYOND%20-%20%E5%8F%AF%E5%90%A6%E5%86%B2%E7%A0%B4.mp3'></li>
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ee3640920c5ec2f34694'
+        data-cs='31ca17ca1df0813e0513ab2b0868b94cdeec4ced'
+        data-r='aaronbank.github.io'
+        data-o='aaronbank'
+        data-a='aaronbank'
+        data-d='true'
+    >查看评论</div>
+
+
+    </div>
+    
+        <div class='side'>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#浅拷贝实现方式"><span class="toc-number">1.</span> <span class="toc-text">浅拷贝实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-for-in"><span class="toc-number">1.1.</span> <span class="toc-text">1. for in</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Object-assign"><span class="toc-number">1.2.</span> <span class="toc-text">2. Object.assign()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对象的深拷贝"><span class="toc-number">2.</span> <span class="toc-text">对象的深拷贝</span></a></li></ol>
+        </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>
