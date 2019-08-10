@@ -414,8 +414,10 @@ const execScript = () => {
     }
 }
 
-module.exports = () => {
+module.exports = (env) => {
     console.log(chalk.blue(' Check DLL package integrity...'));
+    // 为了保证线上环境包完整性，每次发布build之前先进行dll打包操作，开发环境则做动态监测
+    if (env === 'production') return execScript()
     // 获取dll配置入口配置对象
     const dlls = Object.keys(config.dll.entry)
     // 获取dll入口文件个数
@@ -455,7 +457,7 @@ const vueLoaderConfig = require('./vue-loader.conf')
 const detection = require('./detection')
 
 // 检测dll包可用性
-detection()
+detection(process.env.NODE_ENV)
 
 function resolve (dir) {
     ...
